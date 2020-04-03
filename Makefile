@@ -7,8 +7,12 @@
 
 NAME	=	myftp
 
-SRC	=	src/main.c			\
-		src/make_socket.c	\
+SRC	=	src/make_socket.c	\
+		src/main.c	\
+		src/user/user_dir_utils.c	\
+		src/user/user_utils.c	\
+		src/user/user_login_utils.c	\
+		src/utils.c	\
 
 OBJ	=	$(SRC:%.c=%.o)
 
