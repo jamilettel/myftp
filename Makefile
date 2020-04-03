@@ -9,6 +9,11 @@ NAME	=	myftp
 
 SRC	=	src/make_socket.c	\
 		src/main.c	\
+		src/list/generic_list_del_elem.c	\
+		src/list/generic_list_add_elem.c	\
+		src/list/generic_list_utils.c	\
+		src/list/generic_list.c	\
+		src/list/generic_list_get_elem.c	\
 		src/user/user_dir_utils.c	\
 		src/user/user_utils.c	\
 		src/user/user_login_utils.c	\

@@ -21,38 +21,34 @@ bool user_set_wd(user_t *user)
     return (true);
 }
 
-bool user_cwd(user_t *user, const char *path, reply_t *reply)
+bool user_cwd(user_t *user, const char *path)
 {
     char *original_directory = wrap_original_directory(false);
 
-    if (!reply) {
-        reply->message = strdup("CWD requires an argument.");
-        reply->reply = REPLY_ERROR;
-        return (reply->message != NULL);
-    }
+    if (!path)
+        return (user_add_reply(user, REPLY(REPLY_ERROR, "Argument required.")));
     if (!original_directory || !user->wd || chdir(user->wd))
         return (false);
     if (chdir(path)) {
-        reply->message = strdup("Could not change to directory.");
-        reply->reply = REPLY_ERROR;
-        return (reply->message != NULL);
+        return (user_add_reply(
+                    user, REPLY(REPLY_ERROR, "Could not change directory.")));
     }
     if (!user_set_wd(user) || chdir(original_directory))
         return (false);
-    reply->message = strdup("Requested file action okay, completed.");
-    reply->reply = REPLY_FILE_ACTION_OK;
-    return (reply->message != NULL);
+    return (user_add_reply(user,
+        REPLY(REPLY_FILE_ACTION_OK, "Requested file action okay, completed.")));
 }
 
-bool user_cdup(user_t *user, const char *not_used, reply_t *reply)
+bool user_cdup(user_t *user, const char *not_used)
 {
-    if (not_used) {
-        reply->message = strdup("CDUP doesn't require arguments.");
-        reply->reply = REPLY_ERROR;
-        return (reply->message != NULL);
-    }
-    if (!user_cwd(user, "..", reply))
+    reply_t *reply = NULL;
+
+    if (not_used)
+        return (user_add_reply(
+                    user, REPLY(REPLY_ERROR, "Too many arguments.")));
+    if (!user_cwd(user, ".."))
         return (false);
+    reply = list_get_elem_at_back(user->reply_list);
     if (reply->reply == REPLY_FILE_ACTION_OK) {
         reply->reply = REPLY_OK;
         free(reply->message);
@@ -61,16 +57,12 @@ bool user_cdup(user_t *user, const char *not_used, reply_t *reply)
     return (reply->message != NULL);
 }
 
-bool user_pwd(user_t *user, const char *not_used, reply_t *reply)
+bool user_pwd(user_t *user, const char *not_used)
 {
-    if (not_used) {
-        reply->message = strdup("PWD doesn't require arguments.");
-        reply->reply = REPLY_ERROR;
-        return (reply->message != NULL);
-    }
+    if (not_used)
+        return (user_add_reply(
+                    user, REPLY(REPLY_ERROR, "Too many arguments.")));
     if (!user->wd)
         return (false);
-    reply->message = strdup(user->wd);
-    reply->reply = REPLY_PATHNAME;
-    return (reply->message != NULL);
+    return (user_add_reply(user, REPLY(REPLY_PATHNAME, user->wd)));
 }

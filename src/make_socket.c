@@ -27,7 +27,7 @@ bool prepare_socket(int sock, short port, struct sockaddr_in *addr)
         return (false);
     }
     if (listen(sock, 10)) {
-        printf("Listen failed\n");
+        perror("Listen failed");
         return (false);
     }
     return (true);

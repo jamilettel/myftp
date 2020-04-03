@@ -21,7 +21,7 @@
 
 char *wrap_original_directory(bool change);
 
-int make_socket();
+int make_socket(void);
 bool prepare_socket(int sock, short port, struct sockaddr_in *addr);
 
 #endif /* MYFTP_H_ */
