@@ -14,6 +14,7 @@
 #include "generic_list.h"
 
 #define REPLY(code, message) (reply_t){code, strdup(message)}
+#define USER_BUFFER_SIZE 4096
 
 enum reply_code {
     REPLY_ERROR = -1,
@@ -41,10 +42,16 @@ typedef struct {
     struct sockaddr_in addr;
     char *w_buff;
     size_t w_buff_size;
-    size_t w_buff_pos;
+    int w_pos;
     list_t reply_list;
-    char r_buffer[1024];
+    char r_buffer[USER_BUFFER_SIZE];
+    int r_end;
 } user_t;
+
+struct command_fct {
+    char *command_name;
+    bool (*fct)(user_t *user, const char *path);
+};
 
 /* START User functions */
 user_t *user_init(int tcp_socket);
@@ -63,6 +70,8 @@ bool user_set_password(user_t *user, const char *passwd);
 bool user_pwd(user_t *user, const char *not_used);
 
 bool user_set_w_buffer(user_t *user);
+
+bool user_run_command(user_t *usr, char *cmd, char *arg, fd_set active_sets[2]);
 
 /* END User functions */
 
