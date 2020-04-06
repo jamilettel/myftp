@@ -8,18 +8,22 @@
 NAME	=	myftp
 
 SRC	=	\
+		src/server_loop.c	\
 		src/make_socket.c	\
+		src/users_read_write.c	\
 		src/main.c	\
 		src/list/generic_list_del_elem.c	\
 		src/list/generic_list_add_elem.c	\
 		src/list/generic_list_utils.c	\
 		src/list/generic_list.c	\
 		src/list/generic_list_get_elem.c	\
+		src/user_array_utils.c	\
 		src/user/user_dir_utils.c	\
 		src/user/user_utils.c	\
 		src/user/user_run_commands.c	\
 		src/user/user_login_utils.c	\
 		src/utils.c	\
+		src/cmd_utils.c	\
 
 OBJ	=	$(SRC:%.c=%.o)
 

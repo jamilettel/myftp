@@ -7,7 +7,7 @@
 
 #include "myftp.h"
 
-int make_socket()
+int make_socket(void)
 {
     int sock = socket(AF_INET, SOCK_STREAM, 0);
 
