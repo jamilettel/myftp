@@ -40,4 +40,6 @@ bool manage_user_write_fd_set(fd_set active_set[2], user_t **users);
 bool manage_user_write(fd_set sets[2], user_t **users);
 bool manage_user_read(fd_set sets[2], user_t ***users, fd_set active_set[2]);
 
+bool manage_arguments(int ac, char **av, int *port, int *return_value);
+
 #endif /* MYFTP_H_ */
