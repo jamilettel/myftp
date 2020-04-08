@@ -46,7 +46,7 @@ static bool check_directory(char *dir, int *return_value)
     return (true);
 }
 
-bool manage_arguments(int ac, char  **av, int *port, int *return_value)
+bool manage_arguments(int ac, char **av, int *port, int *return_value)
 {
     if (ac == 2 && (!strcmp(av[1], "-h") || !strcmp(av[1], "-help"))) {
         print_help(1);

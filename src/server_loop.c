@@ -17,22 +17,34 @@ static bool manage_new_users(
     return (true);
 }
 
-bool manage_user_commands(fd_set active_sets[2], user_t **users)
+static bool manage_user_quit(
+    fd_set active_set[2], user_t ***users, int *i, char *command)
 {
-    char *command = NULL;
+    if (strcmp(command, "QUIT"))
+        return (false);
+    remove_user_from_array(users, *i, active_set);
+    (*i)--;
+    return (true);
+}
+
+static bool manage_user_commands(fd_set active_sets[2], user_t ***users)
+{
+    char *cmd = NULL;
     char *arg = NULL;
 
     if (!users)
         return (true);
-    for (int i = 0; users[i]; i++) {
-        if (!contains_cmd(users[i]->r_buffer, users[i]->r_end))
+    for (int i = 0; (*users)[i]; i++) {
+        if (!contains_cmd((*users)[i]->r_buff, (*users)[i]->r_end))
             continue;
-        if (!extract_cmd(users[i]->r_buffer, &users[i]->r_end, &command, &arg))
+        if (!extract_cmd((*users)[i]->r_buff, &(*users)[i]->r_end, &cmd, &arg))
             return (false);
-        if (!user_run_command(users[i], command, arg, active_sets))
+        if (manage_user_quit(active_sets, users, &i, cmd))
+            continue;
+        if (!user_run_command((*users)[i], cmd, arg, active_sets))
             return (false);
-        free(command);
-        command = NULL;
+        free(cmd);
+        cmd = NULL;
         free(arg);
         arg = NULL;
     }
@@ -56,7 +68,7 @@ bool run_server_loop(int tcp_socket)
         if (!manage_new_users(sets, &users, tcp_socket, active_sets) ||
             !manage_user_write(sets, users) ||
             !manage_user_read(sets, &users, active_sets) ||
-            !manage_user_commands(active_sets, users))
+            !manage_user_commands(active_sets, &users))
             return (false);
     }
     return (true);

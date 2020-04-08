@@ -68,7 +68,7 @@ bool manage_user_read(fd_set sets[2], user_t ***users, fd_set active_set[2])
         if ((len = USER_BUFFER_SIZE - 1 - (*users)[i]->r_end) <= 0)
             continue;
         size = read(
-            (*users)[i]->cfd, &(*users)[i]->r_buffer[(*users)[i]->r_end], len);
+            (*users)[i]->cfd, &(*users)[i]->r_buff[(*users)[i]->r_end], len);
         if (size < 0)
             return (false);
         if (size == 0) {

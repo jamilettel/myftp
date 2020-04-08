@@ -16,6 +16,9 @@
 #define REPLY(code, message) (reply_t){code, strdup(message)}
 #define USER_BUFFER_SIZE 4096
 
+#define USER_NOT_LOGGED "Use USER and PASS to login."
+#define USER_LOGGED "You are already logged in."
+
 enum reply_code {
     REPLY_ERROR = -1,
     REPLY_OK = 200,
@@ -44,7 +47,7 @@ typedef struct {
     size_t w_buff_size;
     int w_pos;
     list_t reply_list;
-    char r_buffer[USER_BUFFER_SIZE];
+    char r_buff[USER_BUFFER_SIZE];
     int r_end;
 } user_t;
 

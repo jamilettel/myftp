@@ -32,7 +32,6 @@ void remove_user_from_fd_sets(user_t *user, fd_set active_sets[2]);
 void remove_user_from_array(user_t ***users, int nb, fd_set active_set[2]);
 bool accept_new_user(user_t ***users, int tcp_socket, fd_set active_sets[2]);
 
-bool manage_user_commands(fd_set active_sets[2], user_t **users);
 bool run_server_loop(int tcp_socket);
 
 void init_fd_set(fd_set active_sets[2], int tcp_socket);
