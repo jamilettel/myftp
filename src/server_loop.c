@@ -17,14 +17,18 @@ static bool manage_new_users(
     return (true);
 }
 
-static bool manage_user_quit(
-    fd_set active_set[2], user_t ***users, int *i, char *command)
+static void manage_user_quit(fd_set active_set[2], user_t ***users)
 {
-    if (strcmp(command, "QUIT"))
-        return (false);
-    remove_user_from_array(users, *i, active_set);
-    (*i)--;
-    return (true);
+    if (!*users)
+        return;
+    for (int i = 0; (*users)[i]; i++) {
+        if (!(*users)[i]->quit)
+            continue;
+        if ((*users)[i]->w_buff && (*users)[i]->w_buff[(*users)[i]->w_pos])
+            continue;
+        remove_user_from_array(users, i, active_set);
+        i--;
+    }
 }
 
 static bool manage_user_commands(fd_set active_sets[2], user_t ***users)
@@ -39,8 +43,6 @@ static bool manage_user_commands(fd_set active_sets[2], user_t ***users)
             continue;
         if (!extract_cmd((*users)[i]->r_buff, &(*users)[i]->r_end, &cmd, &arg))
             return (false);
-        if (manage_user_quit(active_sets, users, &i, cmd))
-            continue;
         if (!user_run_command((*users)[i], cmd, arg, active_sets))
             return (false);
         free(cmd);
@@ -61,6 +63,7 @@ bool run_server_loop(int tcp_socket)
     while (1) {
         if (!manage_user_write_fd_set(active_sets, users))
             return (false);
+        manage_user_quit(active_sets, &users);
         sets[0] = active_sets[0];
         sets[1] = active_sets[1];
         if (select(FD_SETSIZE, &sets[0], &sets[1], NULL, NULL) == -1)

@@ -23,6 +23,7 @@ enum reply_code {
     REPLY_ERROR = -1,
     REPLY_OK = 200,
     REPLY_READY = 220,
+    REPLY_QUIT = 221,
     REPLY_LOGGED_IN = 230,
     REPLY_FILE_ACTION_OK = 250,
     REPLY_PATHNAME = 257,
@@ -49,6 +50,7 @@ typedef struct {
     list_t reply_list;
     char r_buff[USER_BUFFER_SIZE];
     int r_end;
+    bool quit;
 } user_t;
 
 struct command_fct {
@@ -75,6 +77,7 @@ bool user_pwd(user_t *user, const char *not_used);
 bool user_set_w_buffer(user_t *user);
 
 bool user_run_command(user_t *usr, char *cmd, char *arg, fd_set active_sets[2]);
+bool user_quit(user_t *user, const char *arg);
 
 /* END User functions */
 

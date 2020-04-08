@@ -25,6 +25,7 @@ SRC	=	\
 		src/utils.c	\
 		src/cmd_utils.c	\
 		src/manage_arguments.c	\
+		src/user/user_quit.c	\
 
 OBJ	=	$(SRC:%.c=%.o)
 
