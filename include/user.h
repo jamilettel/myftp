@@ -77,7 +77,10 @@ bool user_pwd(user_t *user, const char *not_used);
 bool user_set_w_buffer(user_t *user);
 
 bool user_run_command(user_t *usr, char *cmd, char *arg, fd_set active_sets[2]);
+
 bool user_quit(user_t *user, const char *arg);
+
+bool user_noop(user_t *user, const char *arg);
 
 /* END User functions */
 
