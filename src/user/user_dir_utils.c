@@ -26,12 +26,12 @@ bool user_cwd(user_t *user, const char *path)
     char *original_directory = wrap_original_directory(false);
 
     if (!path)
-        return (user_add_reply(user, REPLY(REPLY_ERROR, "Argument required.")));
+        return (user_add_reply(user, REPLY(REPLY_ARG, "Argument required.")));
     if (!original_directory || !user->wd || chdir(user->wd))
         return (false);
     if (chdir(path)) {
         return (user_add_reply(
-                    user, REPLY(REPLY_ERROR, "Could not change directory.")));
+                    user, REPLY(REPLY_FILE_ERR, "Directory change failed.")));
     }
     if (!user_set_wd(user) || chdir(original_directory))
         return (false);
@@ -45,7 +45,7 @@ bool user_cdup(user_t *user, const char *not_used)
 
     if (not_used)
         return (user_add_reply(
-                    user, REPLY(REPLY_ERROR, "Too many arguments.")));
+                    user, REPLY(REPLY_ARG, "Too many arguments.")));
     if (!user_cwd(user, ".."))
         return (false);
     reply = list_get_elem_at_back(user->reply_list);
@@ -61,7 +61,7 @@ bool user_pwd(user_t *user, const char *not_used)
 {
     if (not_used)
         return (user_add_reply(
-                    user, REPLY(REPLY_ERROR, "Too many arguments.")));
+                    user, REPLY(REPLY_ARG, "Too many arguments.")));
     if (!user->wd)
         return (false);
     return (user_add_reply(user, REPLY(REPLY_PATHNAME, user->wd)));

@@ -37,7 +37,8 @@ static int user_run_logged_commands(
         if (!cmp && user->logged)
             return (commands_logged[i].fct(user, arg));
         else if (!cmp)
-            return (user_add_reply(user, REPLY(REPLY_ERROR, USER_NOT_LOGGED)));
+            return (user_add_reply(
+                        user, REPLY(REPLY_NOT_LOGGED, USER_NOT_LOGGED)));
     }
     return (-1);
 }
@@ -53,7 +54,7 @@ static int user_run_unlogged_commands(
         if (!cmp && !user->logged)
             return (commands_not_logged[i].fct(user, arg));
         else if (!cmp)
-            return (user_add_reply(user, REPLY(REPLY_ERROR, USER_LOGGED)));
+            return (user_add_reply(user, REPLY(REPLY_NOT_LOGGED, USER_LOGGED)));
     }
     return (-1);
 }
@@ -74,15 +75,15 @@ bool user_run_command(user_t *user, char *cmd, char *arg, fd_set active_sets[2])
     int res = 0;
 
     if (!cmd)
-        return (user_add_reply(user, REPLY(REPLY_ERROR, "Command required.")));
+        return (user_add_reply(user, REPLY(REPLY_SYNTAX, "Command required.")));
+    res = user_run_shared_commands(user, cmd, arg, active_sets);
+    if (res > -1)
+        return (res != 0);
     res = user_run_logged_commands(user, cmd, arg, active_sets);
     if (res > -1)
         return (res != 0);
     res = user_run_unlogged_commands(user, cmd, arg, active_sets);
     if (res > -1)
         return (res != 0);
-    res = user_run_shared_commands(user, cmd, arg, active_sets);
-    if (res > -1)
-        return (res != 0);
-    return (user_add_reply(user, REPLY(REPLY_ERROR, "Command not found.")));
+    return (user_add_reply(user, REPLY(REPLY_SYNTAX, "Command not found.")));
 }

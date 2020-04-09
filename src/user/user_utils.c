@@ -18,13 +18,10 @@ bool user_set_w_buffer(user_t *user)
         user->w_buff = realloc(user->w_buff, strlen(reply->message) + 7);
     if (!user->w_buff)
         return (false);
-    if (reply->reply != REPLY_ERROR) {
-        user->w_buff[0] = '0' + (reply->reply / 100) % 10;
-        user->w_buff[1] = '0' + (reply->reply / 10) % 10;
-        user->w_buff[2] = '0' + reply->reply % 10;
-        user->w_buff[3] = ' ';
-    } else
-        strcpy(user->w_buff, "xxx ");
+    user->w_buff[0] = '0' + (reply->reply / 100) % 10;
+    user->w_buff[1] = '0' + (reply->reply / 10) % 10;
+    user->w_buff[2] = '0' + reply->reply % 10;
+    user->w_buff[3] = ' ';
     strcpy(&user->w_buff[4], reply->message);
     strcpy(&user->w_buff[4 + strlen(reply->message)], "\r\n");
     (free(reply->message) ,free(reply));
@@ -57,8 +54,10 @@ user_t *user_init(int fd)
 void user_destroy(user_t *user)
 {
     close(user->cfd);
-    if (user->ft_fd)
-        close(user->ft_fd);
+    if (user->ft_socket)
+        close(user->ft_socket);
+    if (user->ft_cfd)
+        close(user->ft_cfd);
     if (user->name)
         free(user->name);
     if (user->passwd)

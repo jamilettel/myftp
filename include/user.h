@@ -20,7 +20,6 @@
 #define USER_LOGGED "You are already logged in."
 
 enum reply_code {
-    REPLY_ERROR = -1,
     REPLY_OK = 200,
     REPLY_READY = 220,
     REPLY_QUIT = 221,
@@ -29,6 +28,13 @@ enum reply_code {
     REPLY_PATHNAME = 257,
     REPLY_USERNAME_OK = 331,
     REPLY_NEED_USERNAME = 332,
+    REPLY_SYNTAX = 500,
+    REPLY_ARG = 501,
+    REPLY_NOT_IMPL = 502,
+    REPLY_BAD_SEQ = 503,
+    REPLY_NOT_IMPL_FOR_PARAM = 504,
+    REPLY_NOT_LOGGED = 530,
+    REPLY_FILE_ERR = 550,
 };
 
 typedef struct {
@@ -38,7 +44,8 @@ typedef struct {
 
 typedef struct {
     int cfd;
-    int ft_fd;
+    int ft_cfd;
+    int ft_socket;
     char *name;
     char *passwd;
     bool logged;
@@ -62,25 +69,21 @@ struct command_fct {
 user_t *user_init(int tcp_socket);
 void user_destroy(user_t *user);
 
-/* should not be used directly */
 bool user_set_wd(user_t *user);
 bool user_check_username_passwd(user_t *user);
 bool user_add_reply(user_t *user, reply_t reply);
 
-/* can be used directly */
 bool user_cwd(user_t *user, const char *path);
 bool user_cdup(user_t *user, const char *not_used);
 bool user_set_name(user_t *user, const char *name);
 bool user_set_password(user_t *user, const char *passwd);
 bool user_pwd(user_t *user, const char *not_used);
+bool user_quit(user_t *user, const char *arg);
+bool user_noop(user_t *user, const char *arg);
 
 bool user_set_w_buffer(user_t *user);
 
 bool user_run_command(user_t *usr, char *cmd, char *arg, fd_set active_sets[2]);
-
-bool user_quit(user_t *user, const char *arg);
-
-bool user_noop(user_t *user, const char *arg);
 
 /* END User functions */
 

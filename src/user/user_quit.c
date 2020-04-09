@@ -11,7 +11,7 @@ bool user_quit(user_t *user, const char *arg)
 {
     if (arg)
         return (user_add_reply(
-                    user, REPLY(REPLY_ERROR, "Too many arguments.")));
+                    user, REPLY(REPLY_ARG, "Too many arguments.")));
     user->quit = true;
     return (user_add_reply(user, REPLY(REPLY_QUIT, "See you ;)")));
 }
