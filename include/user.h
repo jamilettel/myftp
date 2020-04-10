@@ -44,8 +44,9 @@ typedef struct {
 
 typedef struct {
     int cfd;
-    int ft_cfd;
     int ft_socket;
+    int ft_cfd;
+    int dt_pid;
     char *name;
     char *passwd;
     bool logged;

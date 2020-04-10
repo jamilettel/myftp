@@ -6,6 +6,7 @@
 */
 
 #include "myftp.h"
+#include <sys/wait.h>
 
 static bool manage_new_users(
     fd_set sets[2], user_t ***users, int tcp_socket, fd_set active_sets[2])
@@ -53,6 +54,26 @@ static bool manage_user_commands(fd_set active_sets[2], user_t ***users)
     return (true);
 }
 
+bool manage_data_transfer_processes(fd_set active_set[2], user_t **users)
+{
+    int status = 0;
+
+    if (!users)
+        return (true);
+    for (int i = 0; users[i]; i++) {
+        if (!users[i]->dt_pid)
+            continue;
+        if (waitpid(users[i]->dt_pid, &status, WNOHANG) == -1)
+            return (false);
+        if (WIFEXITED(status)) {
+            users[i]->dt_pid = 0;
+            FD_SET(users[i]->cfd, &active_set[0]);
+        } else if (FD_ISSET(users[i]->cfd, &active_set[0]))
+            FD_CLR(users[i]->cfd, &active_set[0]);
+    }
+    return (true);
+}
+
 bool run_server_loop(int tcp_socket)
 {
     fd_set active_sets[2];
@@ -61,7 +82,8 @@ bool run_server_loop(int tcp_socket)
 
     init_fd_set(active_sets, tcp_socket);
     while (1) {
-        if (!manage_user_write_fd_set(active_sets, users))
+        if (!manage_user_write_fd_set(active_sets, users) ||
+            !manage_data_transfer_processes(active_sets, users))
             return (false);
         manage_user_quit(active_sets, &users);
         sets[0] = active_sets[0];
