@@ -17,6 +17,8 @@ const struct command_fct commands_logged[] = {
     {"CWD", user_cwd},
     {"CDUP", user_cdup},
     {"PWD", user_pwd},
+    {"PASV", user_pasv},
+    {"PORT", user_port},
     {NULL, NULL}
 };
 

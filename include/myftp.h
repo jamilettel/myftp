@@ -22,7 +22,7 @@
 char *wrap_original_directory(bool change);
 
 int make_socket(void);
-bool prepare_socket(int sock, short port, struct sockaddr_in *addr);
+bool prepare_socket(int sock, int ip, short port, struct sockaddr_in *addr);
 
 bool contains_cmd(const char *buffer, int end);
 bool extract_cmd(char *buffer, int *end, char **command, char **arg);
@@ -41,4 +41,4 @@ bool manage_user_read(fd_set sets[2], user_t ***users, fd_set active_set[2]);
 
 bool manage_arguments(int ac, char **av, int *port, int *return_value);
 
-#endif /* MYFTP_H_ */
+#endif /* !MYFTP_H_ */

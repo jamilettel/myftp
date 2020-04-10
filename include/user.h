@@ -23,11 +23,13 @@ enum reply_code {
     REPLY_OK = 200,
     REPLY_READY = 220,
     REPLY_QUIT = 221,
+    REPLY_PASV = 221,
     REPLY_LOGGED_IN = 230,
     REPLY_FILE_ACTION_OK = 250,
     REPLY_PATHNAME = 257,
     REPLY_USERNAME_OK = 331,
     REPLY_NEED_USERNAME = 332,
+    REPLY_CANT_OPEN_DATA_CON = 500,
     REPLY_SYNTAX = 500,
     REPLY_ARG = 501,
     REPLY_NOT_IMPL = 502,
@@ -44,7 +46,7 @@ typedef struct {
 
 typedef struct {
     int cfd;
-    int ft_socket;
+    int dt_socket;
     int ft_cfd;
     int dt_pid;
     char *name;
@@ -81,6 +83,8 @@ bool user_set_password(user_t *user, const char *passwd);
 bool user_pwd(user_t *user, const char *not_used);
 bool user_quit(user_t *user, const char *arg);
 bool user_noop(user_t *user, const char *arg);
+bool user_port(user_t *user, const char *arg);
+bool user_pasv(user_t *user, const char *not_used);
 
 bool user_set_w_buffer(user_t *user);
 

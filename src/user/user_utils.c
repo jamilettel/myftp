@@ -54,8 +54,8 @@ user_t *user_init(int fd)
 void user_destroy(user_t *user)
 {
     close(user->cfd);
-    if (user->ft_socket)
-        close(user->ft_socket);
+    if (user->dt_socket)
+        close(user->dt_socket);
     if (user->ft_cfd)
         close(user->ft_cfd);
     if (user->name)

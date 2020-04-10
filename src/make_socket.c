@@ -14,13 +14,16 @@ int make_socket(void)
     return (sock);
 }
 
-bool prepare_socket(int sock, short port, struct sockaddr_in *addr)
+bool prepare_socket(int sock, int ip, short port, struct sockaddr_in *addr)
 {
     int tmp = 1;
 
     addr->sin_family = AF_INET;
     addr->sin_port = htons(port);
-    addr->sin_addr.s_addr = INADDR_ANY;
+    if (ip != INADDR_ANY)
+        addr->sin_addr.s_addr = htonl(ip);
+    else
+        addr->sin_addr.s_addr = INADDR_ANY;
     setsockopt(sock, SOL_SOCKET, SO_REUSEADDR|SO_REUSEPORT, &tmp, sizeof(int));
     if (bind(sock, (struct sockaddr *)addr, sizeof(*addr))) {
         perror("Bind failed");

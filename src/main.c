@@ -20,7 +20,8 @@ int main(int ac, char **av)
     tcp_socket = make_socket();
     if (!wrap_original_directory(true))
         return (84);
-    if (tcp_socket == -1 || !prepare_socket(tcp_socket, port, &my_addr))
+    if (tcp_socket == -1 ||
+        !prepare_socket(tcp_socket, INADDR_ANY, port, &my_addr))
         return (84);
     if (!run_server_loop(tcp_socket))
         return (84);
