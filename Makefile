@@ -28,6 +28,7 @@ SRC	=	\
 		src/user/user_quit.c	\
 		src/user/user_noop.c	\
 		src/user/user_dt_socket.c	\
+		src/user/user_dele.c	\
 
 OBJ	=	$(SRC:%.c=%.o)
 

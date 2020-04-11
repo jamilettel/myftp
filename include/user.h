@@ -85,6 +85,7 @@ bool user_quit(user_t *user, const char *arg);
 bool user_noop(user_t *user, const char *arg);
 bool user_port(user_t *user, const char *arg);
 bool user_pasv(user_t *user, const char *not_used);
+bool user_delete_file(user_t *user, const char *arg);
 
 bool user_set_w_buffer(user_t *user);
 
