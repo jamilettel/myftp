@@ -7,6 +7,7 @@
 
 #include "myftp.h"
 #include <string.h>
+#include <signal.h>
 
 int main(int ac, char **av)
 {
@@ -27,4 +28,5 @@ int main(int ac, char **av)
         return (84);
     free(wrap_original_directory(false));
     close(tcp_socket);
+    return (0);
 }

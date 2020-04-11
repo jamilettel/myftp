@@ -19,16 +19,19 @@ SRC	=	\
 		src/list/generic_list_get_elem.c	\
 		src/user_array_utils.c	\
 		src/user/user_dir_utils.c	\
+		src/user/user_quit.c	\
+		src/user/user_manage_process.c	\
+		src/user/user_list.c	\
 		src/user/user_utils.c	\
+		src/user/user_dele.c	\
 		src/user/user_run_commands.c	\
 		src/user/user_login_utils.c	\
-		src/utils.c	\
-		src/cmd_utils.c	\
-		src/manage_arguments.c	\
-		src/user/user_quit.c	\
 		src/user/user_noop.c	\
 		src/user/user_dt_socket.c	\
-		src/user/user_dele.c	\
+		src/manage_arguments.c	\
+		src/utils.c	\
+		src/destroy_user_array.c	\
+		src/cmd_utils.c	\
 
 OBJ	=	$(SRC:%.c=%.o)
 

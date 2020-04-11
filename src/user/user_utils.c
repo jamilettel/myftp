@@ -62,4 +62,5 @@ void user_destroy(user_t *user)
         free(user->name);
     if (user->passwd)
         free(user->passwd);
+    free(user);
 }

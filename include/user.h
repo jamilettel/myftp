@@ -29,7 +29,7 @@ enum reply_code {
     REPLY_PATHNAME = 257,
     REPLY_USERNAME_OK = 331,
     REPLY_NEED_USERNAME = 332,
-    REPLY_CANT_OPEN_DATA_CON = 500,
+    REPLY_CANT_OPEN_DATA_CON = 425,
     REPLY_SYNTAX = 500,
     REPLY_ARG = 501,
     REPLY_NOT_IMPL = 502,
@@ -76,6 +76,9 @@ bool user_set_wd(user_t *user);
 bool user_check_username_passwd(user_t *user);
 bool user_add_reply(user_t *user, reply_t reply);
 
+bool user_manage_process(
+    user_t *user, const char *arg, void (*fct)(user_t *user, const char *arg));
+
 bool user_cwd(user_t *user, const char *path);
 bool user_cdup(user_t *user, const char *not_used);
 bool user_set_name(user_t *user, const char *name);
@@ -86,6 +89,7 @@ bool user_noop(user_t *user, const char *arg);
 bool user_port(user_t *user, const char *arg);
 bool user_pasv(user_t *user, const char *not_used);
 bool user_delete_file(user_t *user, const char *arg);
+bool user_list(user_t *user, const char *arg);
 
 bool user_set_w_buffer(user_t *user);
 

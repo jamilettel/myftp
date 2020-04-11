@@ -54,22 +54,28 @@ static bool manage_user_commands(fd_set active_sets[2], user_t ***users)
     return (true);
 }
 
-bool manage_data_transfer_processes(fd_set active_set[2], user_t **users)
+static bool manage_data_transfer_processes(
+    fd_set active_set[2], user_t **users, struct timeval **time)
 {
+    static struct timeval timeval;
     int status = 0;
+    int ret = 0;
 
     if (!users)
         return (true);
+    (timeval.tv_usec = 100000, *time = NULL);
     for (int i = 0; users[i]; i++) {
         if (!users[i]->dt_pid)
             continue;
-        if (waitpid(users[i]->dt_pid, &status, WNOHANG) == -1)
+        if ((ret = waitpid(users[i]->dt_pid, &status, WNOHANG)) == -1)
             return (false);
-        if (WIFEXITED(status)) {
+        if (ret && WIFEXITED(status)) {
             users[i]->dt_pid = 0;
             FD_SET(users[i]->cfd, &active_set[0]);
-        } else if (FD_ISSET(users[i]->cfd, &active_set[0]))
+        } else {
+            *time = &timeval;
             FD_CLR(users[i]->cfd, &active_set[0]);
+        }
     }
     return (true);
 }
@@ -79,22 +85,20 @@ bool run_server_loop(int tcp_socket)
     fd_set active_sets[2];
     fd_set sets[2];
     user_t **users = NULL;
+    struct timeval *timeval = NULL;
 
     init_fd_set(active_sets, tcp_socket);
     while (1) {
         if (!manage_user_write_fd_set(active_sets, users) ||
-            !manage_data_transfer_processes(active_sets, users))
+            !manage_data_transfer_processes(active_sets, users, &timeval))
             return (false);
         manage_user_quit(active_sets, &users);
-        sets[0] = active_sets[0];
-        sets[1] = active_sets[1];
-        if (select(FD_SETSIZE, &sets[0], &sets[1], NULL, NULL) == -1)
-            return (false);
+        (sets[0] = active_sets[0], sets[1] = active_sets[1]);
+        select(FD_SETSIZE, &sets[0], &sets[1], NULL, timeval);
         if (!manage_new_users(sets, &users, tcp_socket, active_sets) ||
             !manage_user_write(sets, users) ||
             !manage_user_read(sets, &users, active_sets) ||
             !manage_user_commands(active_sets, &users))
             return (false);
     }
-    return (true);
 }
