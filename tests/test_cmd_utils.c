@@ -48,7 +48,6 @@ Test(extract_cmd, multiple_commands)
 
     cr_assert(extract_cmd(buffer, &end, &cmd, &arg));
     cr_expect_eq(end, strlen("This is another command\r\n"));
-    printf("%d %lu\n", end, strlen("This is another command\r\n"));
     cr_expect_str_eq(buffer, "This is another command\r\n");
     cr_expect_str_eq(cmd, "This");
     cr_expect_str_eq(arg, "is a command");

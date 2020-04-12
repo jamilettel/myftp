@@ -48,7 +48,12 @@ user_t *user_init(int fd)
         return (NULL);
     *user = (user_t){0};
     user->cfd = fd;
-    user_set_wd(user);
+    if (wrap_original_directory(false)) {
+        user->wd = strdup(wrap_original_directory(false));
+        if (!user->wd)
+            return (NULL);
+    } else
+        user_set_wd(user);
     return (user);
 }
 

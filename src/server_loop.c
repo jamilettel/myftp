@@ -32,7 +32,7 @@ static void manage_user_quit(fd_set active_set[2], user_t ***users)
     }
 }
 
-static bool manage_user_commands(fd_set active_sets[2], user_t ***users)
+static bool manage_user_commands(user_t ***users)
 {
     char *cmd = NULL;
     char *arg = NULL;
@@ -44,7 +44,7 @@ static bool manage_user_commands(fd_set active_sets[2], user_t ***users)
             continue;
         if (!extract_cmd((*users)[i]->r_buff, &(*users)[i]->r_end, &cmd, &arg))
             return (false);
-        if (!user_run_command((*users)[i], cmd, arg, active_sets))
+        if (!user_run_command((*users)[i], cmd, arg))
             return (false);
         free(cmd);
         cmd = NULL;
@@ -98,7 +98,7 @@ bool run_server_loop(int tcp_socket)
         if (!manage_new_users(sets, &users, tcp_socket, active_sets) ||
             !manage_user_write(sets, users) ||
             !manage_user_read(sets, &users, active_sets) ||
-            !manage_user_commands(active_sets, &users))
+            !manage_user_commands(&users))
             return (false);
     }
 }

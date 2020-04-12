@@ -33,12 +33,10 @@ const struct command_fct commands_shared[] = {
     {NULL, NULL}
 };
 
-static int user_run_logged_commands(
-    user_t *user, char *cmd, char *arg, fd_set active_sets[2])
+static int user_run_logged_commands(user_t *user, char *cmd, char *arg)
 {
     int cmp = 0;
 
-    (void)active_sets;
     for (int i = 0; commands_logged[i].command_name; i++) {
         cmp = strcmp(cmd, commands_logged[i].command_name);
         if (!cmp && user->logged)
@@ -50,12 +48,10 @@ static int user_run_logged_commands(
     return (-1);
 }
 
-static int user_run_unlogged_commands(
-    user_t *user, char *cmd, char *arg, fd_set active_sets[2])
+static int user_run_unlogged_commands(user_t *user, char *cmd, char *arg)
 {
     int cmp = 0;
 
-    (void)active_sets;
     for (int i = 0; commands_not_logged[i].command_name; i++) {
         cmp = strcmp(cmd, commands_not_logged[i].command_name);
         if (!cmp && !user->logged)
@@ -66,10 +62,8 @@ static int user_run_unlogged_commands(
     return (-1);
 }
 
-static int user_run_shared_commands(
-    user_t *user, char *cmd, char *arg, fd_set active_sets[2])
+static int user_run_shared_commands(user_t *user, char *cmd, char *arg)
 {
-    (void)active_sets;
     for (int i = 0; commands_shared[i].command_name; i++) {
         if (!strcmp(cmd, commands_shared[i].command_name))
             return (commands_shared[i].fct(user, arg));
@@ -77,19 +71,19 @@ static int user_run_shared_commands(
     return (-1);
 }
 
-bool user_run_command(user_t *user, char *cmd, char *arg, fd_set active_sets[2])
+bool user_run_command(user_t *user, char *cmd, char *arg)
 {
     int res = 0;
 
     if (!cmd)
         return (user_add_reply(user, REPLY(REPLY_SYNTAX, "Command required.")));
-    res = user_run_shared_commands(user, cmd, arg, active_sets);
+    res = user_run_shared_commands(user, cmd, arg);
     if (res > -1)
         return (res != 0);
-    res = user_run_logged_commands(user, cmd, arg, active_sets);
+    res = user_run_logged_commands(user, cmd, arg);
     if (res > -1)
         return (res != 0);
-    res = user_run_unlogged_commands(user, cmd, arg, active_sets);
+    res = user_run_unlogged_commands(user, cmd, arg);
     if (res > -1)
         return (res != 0);
     return (user_add_reply(user, REPLY(REPLY_SYNTAX, "Command not found.")));
