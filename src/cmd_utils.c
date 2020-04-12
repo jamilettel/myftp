@@ -21,11 +21,11 @@ bool contains_cmd(const char *buffer, int end)
 
 bool extract_cmd(char *buffer, int *end, char **command, char **arg)
 {
-    int cmd_end = 0;
+    int cmd_end = -1;
     int first_space = -1;
 
     for (int i = 0; i < *end - 1; i++) {
-        if (buffer[i] == '\r' && buffer[i + 1] == '\n') {
+        if (buffer[i] == '\r' && buffer[i + 1] == '\n' && cmd_end < 0) {
             cmd_end = i + 1;
             buffer[i] = 0;
         } else if (buffer[i] == ' ' && first_space < 0) {
@@ -39,7 +39,7 @@ bool extract_cmd(char *buffer, int *end, char **command, char **arg)
         return (false);
     if (first_space >= 0 && !(*arg = strdup(&buffer[first_space + 1])))
         return (false);
-    memmove(buffer, &buffer[cmd_end + 1], *end - (cmd_end + 1));
+    memmove(buffer, &buffer[cmd_end + 1], *end - (cmd_end));
     *end -= cmd_end + 1;
     return (true);
 }
