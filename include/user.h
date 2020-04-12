@@ -23,7 +23,7 @@ enum reply_code {
     REPLY_OK = 200,
     REPLY_READY = 220,
     REPLY_QUIT = 221,
-    REPLY_PASV = 221,
+    REPLY_PASV = 227,
     REPLY_LOGGED_IN = 230,
     REPLY_FILE_ACTION_OK = 250,
     REPLY_PATHNAME = 257,

@@ -24,7 +24,8 @@ bool user_set_w_buffer(user_t *user)
     user->w_buff[3] = ' ';
     strcpy(&user->w_buff[4], reply->message);
     strcpy(&user->w_buff[4 + strlen(reply->message)], "\r\n");
-    (free(reply->message) ,free(reply));
+    free(reply->message);
+    free(reply);
     list_del_elem_at_front(&user->reply_list);
     return (true);
 }
