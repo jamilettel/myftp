@@ -50,7 +50,6 @@ void user_list_in_child(user_t *user, const char *arg)
 
 bool user_list(user_t *user, const char *arg)
 {
-    (void)arg;
     if (!user->dt_socket)
         return (user_add_reply(
                     user, REPLY(REPLY_CANT_OPEN_DATA_CON,

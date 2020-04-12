@@ -21,6 +21,7 @@ const struct command_fct commands_logged[] = {
     {"PORT", user_port},
     {"DELE", user_delete_file},
     {"LIST", user_list},
+    {"RETR", user_retr},
     {NULL, NULL}
 };
 
