@@ -21,6 +21,7 @@
 
 enum reply_code {
     REPLY_OK = 200,
+    REPLY_HELP = 214,
     REPLY_READY = 220,
     REPLY_QUIT = 221,
     REPLY_PASV = 227,
@@ -92,6 +93,7 @@ bool user_delete_file(user_t *user, const char *arg);
 bool user_list(user_t *user, const char *arg);
 bool user_retr(user_t *user, const char *arg);
 bool user_stor(user_t *user, const char *arg);
+bool user_help(user_t *user, const char *arg);
 
 bool user_set_w_buffer(user_t *user);
 

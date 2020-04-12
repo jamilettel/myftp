@@ -23,6 +23,7 @@ const struct command_fct commands_logged[] = {
     {"LIST", user_list},
     {"RETR", user_retr},
     {"STOR", user_stor},
+    {"HELP", user_help},
     {NULL, NULL}
 };
 
