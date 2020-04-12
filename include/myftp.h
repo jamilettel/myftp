@@ -40,7 +40,7 @@ bool manage_user_write(fd_set sets[2], user_t **users);
 bool manage_user_read(fd_set sets[2], user_t ***users, fd_set active_set[2]);
 
 bool manage_arguments(int ac, char **av, int *port, int *return_value);
-void write_on_socket(int fd, char *str);
+void write_on_fd(int fd, char *str);
 void destroy_user_array(user_t **users);
 
 #endif /* !MYFTP_H_ */

@@ -29,6 +29,7 @@ SRC	=	\
 		src/user/user_noop.c	\
 		src/user/user_dt_socket.c	\
 		src/user/user_retr.c	\
+		src/user/user_stor.c	\
 		src/manage_arguments.c	\
 		src/utils.c	\
 		src/destroy_user_array.c	\

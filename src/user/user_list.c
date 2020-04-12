@@ -28,7 +28,7 @@ static void write_result_on_socket(int fd, FILE *file)
     char buffer[512];
 
     while (fgets(buffer, sizeof(buffer), file))
-        write_on_socket(fd, buffer);
+        write_on_fd(fd, buffer);
 }
 
 void user_list_in_child(user_t *user, const char *arg)
@@ -36,7 +36,7 @@ void user_list_in_child(user_t *user, const char *arg)
     char *cmd = list_get_command(arg);
     FILE *file = NULL;
 
-    write_on_socket(user->cfd, "150 Here comes the directory listing.\r\n");
+    write_on_fd(user->cfd, "150 Here comes the directory listing.\r\n");
     if (cmd) {
         file = popen(cmd, "r");
         if (file) {
@@ -45,7 +45,7 @@ void user_list_in_child(user_t *user, const char *arg)
         }
         free(cmd);
     }
-    write_on_socket(user->cfd, "260 Directory send OK.\r\n");
+    write_on_fd(user->cfd, "260 Directory send OK.\r\n");
 }
 
 bool user_list(user_t *user, const char *arg)

@@ -7,7 +7,7 @@
 
 #include "myftp.h"
 
-void write_on_socket(int fd, char *str)
+void write_on_fd(int fd, char *str)
 {
     int len = strlen(str);
     int ret = 0;
@@ -36,12 +36,12 @@ static void accept_and_launch_fct(
     if (select(FD_SETSIZE, &active_set, NULL, NULL, &timeval) == -1)
         return;
     if (!FD_ISSET(user->dt_socket, &active_set)) {
-        write_on_socket(user->cfd, "425 Could not establish connection.\r\n");
+        write_on_fd(user->cfd, "425 Could not establish connection.\r\n");
         return;
     }
     user->ft_cfd= accept(user->dt_socket, (struct sockaddr *)&addr, &sock_size);
     if (user->ft_cfd == -1)
-        write_on_socket(user->cfd, "425 Could not establish connection.\r\n");
+        write_on_fd(user->cfd, "425 Could not establish connection.\r\n");
     else
         fct(user, arg);
 }
@@ -49,8 +49,12 @@ static void accept_and_launch_fct(
 bool user_manage_process(
     user_t *user, const char *arg, void (*fct)(user_t *, const char *))
 {
-    int child = fork();
+    int child;
 
+    if (chdir(user->wd))
+        return (user_add_reply(user, REPLY(
+            REPLY_FILE_ERR, "Could not access current working directory.")));
+    child = fork();
     if (child == -1)
         return (false);
     else if (child) {
