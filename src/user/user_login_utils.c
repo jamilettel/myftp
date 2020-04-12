@@ -46,7 +46,7 @@ bool user_set_name(user_t *user, const char *name)
 bool user_set_password(user_t *user, const char *passwd)
 {
     if (!passwd)
-        return (user_add_reply(user, REPLY(REPLY_ARG, "Argument required.")));
+        passwd = "";
     user->passwd = strdup(passwd);
     if (!user->passwd)
         return (false);
