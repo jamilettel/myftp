@@ -28,9 +28,9 @@ path is the path to the home directory for the Anonymous user\n");
 static bool get_port(char *port_str, int *port, int *return_value)
 {
     *port = atoi(port_str);
-    if (*port > 65535 || *port < 1025) {
+    if (*port > 65535 || *port < 0) {
         *return_value = 84;
-        dprintf(2, "Port should be between 1024 and 65536.\n");
+        dprintf(2, "Port should be between 0 and 65536.\n");
         return (false);
     }
     return (true);

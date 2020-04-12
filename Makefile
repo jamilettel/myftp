@@ -40,6 +40,7 @@ SRC	=	\
 TEST_SRC	=	\
 				tests/redirect_all_std.c		\
 				tests/test_cmd_utils.c			\
+				tests/test_generic_list.c		\
 
 OBJ	=	$(SRC:%.c=%.o) $(MAIN:%.c=%.o)
 
