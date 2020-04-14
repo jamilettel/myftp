@@ -9,7 +9,7 @@
 
 bool user_help(user_t *user, const char *arg)
 {
-    char *help_message = "The following comands are recognized.\n\
+    char *help_message = "The following comands are recognized: \
 USER PASS CWD CDUP QUIT DELE PWD PASV PORT HELP NOOP RETR STOR LIST";
 
     (void)arg;
