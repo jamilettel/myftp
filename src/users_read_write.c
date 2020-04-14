@@ -23,11 +23,13 @@ bool manage_user_write_fd_set(fd_set active_set[2], user_t **users)
     for (int i = 0; users[i] && return_value; i++) {
         if (users[i]->w_buff && users[i]->w_buff[users[i]->w_pos])
             continue;
-        if (!list_get_size(users[i]->reply_list))
+        if (!list_get_size(users[i]->reply_list)) {
             FD_CLR(users[i]->cfd, &active_set[1]);
-        else {
+            FD_SET(users[i]->cfd, &active_set[0]);
+        } else {
             return_value &= user_set_w_buffer(users[i]);
             FD_SET(users[i]->cfd, &active_set[1]);
+            FD_CLR(users[i]->cfd, &active_set[0]);
         }
     }
     return (return_value);
