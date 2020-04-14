@@ -17,38 +17,13 @@ bool is_valid_path_to_file(const char *filepath)
     return (filepath[len - 1] != '/');
 }
 
-char *get_filepath_parent_directory(const char *filepath)
-{
-    int i = strlen(filepath) - 1;
-    char *parent_dir = NULL;
-
-    while (i > 0 && filepath[i] != '/')
-        i--;
-    if (filepath[i] != '/')
-        return (strdup("."));
-    parent_dir = strdup(filepath);
-    if (parent_dir) {
-        parent_dir[i] = 0;
-    }
-    return (parent_dir);
-}
-
 bool can_write_file(const char *filepath)
 {
-    char *parent_directory = NULL;
-    bool result = false;
-
     if (!is_valid_path_to_file(filepath))
         return (false);
-    if (!access(filepath, W_OK))
-        return (true);
     if (!access(filepath, F_OK))
-        return (false);
-    parent_directory = get_filepath_parent_directory(filepath);
-    if (parent_directory && !access(parent_directory, W_OK))
-        result = true;
-    free(parent_directory);
-    return (result);
+        return (access(filepath, R_OK) == 0);
+    return (true);
 }
 
 void user_stor_in_child(user_t *user, const char *arg)
@@ -65,7 +40,10 @@ void user_stor_in_child(user_t *user, const char *arg)
         }
         close(fd);
     }
-    write_on_fd(user->cfd, "260 Transfer complete.\r\n");
+    if (size == -1)
+        write_on_fd(user->cfd, "426 Failure reading network stream.\r\n");
+    else
+        write_on_fd(user->cfd, "226 Transfer complete.\r\n");
 }
 
 bool user_stor(user_t *user, const char *arg)

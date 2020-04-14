@@ -45,7 +45,7 @@ void user_list_in_child(user_t *user, const char *arg)
         }
         free(cmd);
     }
-    write_on_fd(user->cfd, "260 Directory send OK.\r\n");
+    write_on_fd(user->cfd, "226 Directory send OK.\r\n");
 }
 
 bool user_list(user_t *user, const char *arg)

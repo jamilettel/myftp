@@ -34,7 +34,10 @@ void user_retr_in_child(user_t *user, const char *arg)
         }
         close(fd);
     }
-    write_on_fd(user->cfd, "260 Transfer complete.\r\n");
+    if (size == -1)
+        write_on_fd(user->cfd, "426 Failure writing network stream.\r\n");
+    else
+        write_on_fd(user->cfd, "226 Transfer complete.\r\n");
 }
 
 bool user_retr(user_t *user, const char *arg)

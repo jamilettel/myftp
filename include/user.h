@@ -13,7 +13,7 @@
 #include <arpa/inet.h>
 #include "generic_list.h"
 
-#define REPLY(code, message) (reply_t){code, strdup(message)}
+#define REPLY(code, message) (reply_t) {code, strdup(message)}
 #define USER_BUFFER_SIZE 4096
 
 #define USER_NOT_LOGGED "Use USER and PASS to login."

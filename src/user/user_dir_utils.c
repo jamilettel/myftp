@@ -41,20 +41,10 @@ bool user_cwd(user_t *user, const char *path)
 
 bool user_cdup(user_t *user, const char *not_used)
 {
-    reply_t *reply = NULL;
-
     if (not_used)
         return (user_add_reply(
                     user, REPLY(REPLY_ARG, "Too many arguments.")));
-    if (!user_cwd(user, ".."))
-        return (false);
-    reply = list_get_elem_at_back(user->reply_list);
-    if (reply->reply == REPLY_FILE_ACTION_OK) {
-        reply->reply = REPLY_OK;
-        free(reply->message);
-        reply->message = strdup("Command okay.");
-    }
-    return (reply->message != NULL);
+    return (user_cwd(user, ".."));
 }
 
 bool user_pwd(user_t *user, const char *not_used)
