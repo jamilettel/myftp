@@ -26,7 +26,8 @@ bool user_cwd(user_t *user, const char *path)
     char *original_directory = wrap_original_directory(false);
 
     if (!path)
-        return (user_add_reply(user, REPLY(REPLY_ARG, "Argument required.")));
+        return (user_add_reply(
+                    user, REPLY(REPLY_FILE_ERR, "Argument required.")));
     if (!original_directory || !user->wd || chdir(user->wd))
         return (false);
     if (chdir(path)) {
