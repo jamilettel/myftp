@@ -17,9 +17,9 @@ void remove_user_from_fd_sets(user_t *user, fd_set active_sets[2])
     FD_CLR(user->cfd, &active_sets[0]);
     if (FD_ISSET(user->cfd, &active_sets[1]))
         FD_CLR(user->cfd, &active_sets[1]);
-    if (user->ft_cfd) {
-        FD_CLR(user->ft_cfd, &active_sets[0]);
-        FD_CLR(user->ft_cfd, &active_sets[1]);
+    if (user->dt_cfd) {
+        FD_CLR(user->dt_cfd, &active_sets[0]);
+        FD_CLR(user->dt_cfd, &active_sets[1]);
     }
 }
 

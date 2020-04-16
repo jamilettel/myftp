@@ -14,7 +14,8 @@ int make_socket(void)
     return (sock);
 }
 
-bool prepare_socket(int sock, int ip, short port, struct sockaddr_in *addr)
+bool prepare_socket_listen(
+    int sock, int ip, short port, struct sockaddr_in *addr)
 {
     int tmp = 1;
 
@@ -33,5 +34,16 @@ bool prepare_socket(int sock, int ip, short port, struct sockaddr_in *addr)
         perror("Listen failed");
         return (false);
     }
+    return (true);
+}
+
+bool prepare_socket_connect(int ip, short port, struct sockaddr_in *addr)
+{
+    addr->sin_family = AF_INET;
+    addr->sin_port = htons(port);
+    if (ip != INADDR_ANY)
+        addr->sin_addr.s_addr = htonl(ip);
+    else
+        addr->sin_addr.s_addr = INADDR_ANY;
     return (true);
 }

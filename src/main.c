@@ -22,7 +22,7 @@ int main(int ac, char **av)
     if (!wrap_original_directory(true))
         return (84);
     if (tcp_socket == -1 ||
-        !prepare_socket(tcp_socket, INADDR_ANY, port, &my_addr))
+        !prepare_socket_listen(tcp_socket, INADDR_ANY, port, &my_addr))
         return (84);
     if (!run_server_loop(tcp_socket))
         return (84);

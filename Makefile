@@ -28,7 +28,8 @@ SRC	=	\
 		src/user/user_run_commands.c		\
 		src/user/user_login_utils.c			\
 		src/user/user_noop.c				\
-		src/user/user_dt_socket.c			\
+		src/user/user_port.c				\
+		src/user/user_pasv.c				\
 		src/user/user_retr.c				\
 		src/user/user_stor.c				\
 		src/user/user_help.c				\

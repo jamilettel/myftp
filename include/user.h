@@ -48,13 +48,14 @@ typedef struct {
 typedef struct {
     int cfd;
     int dt_socket;
-    int ft_cfd;
+    int dt_cfd;
     int dt_pid;
     char *name;
     char *passwd;
     bool logged;
     char *wd;
     struct sockaddr_in addr;
+    struct sockaddr_in active_addr;
     char *w_buff;
     size_t w_buff_size;
     int w_pos;
@@ -62,6 +63,7 @@ typedef struct {
     char r_buff[USER_BUFFER_SIZE];
     int r_end;
     bool quit;
+    bool actif;
 } user_t;
 
 struct command_fct {

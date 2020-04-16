@@ -39,8 +39,20 @@ static void accept_and_launch_fct(
         write_on_fd(user->cfd, "425 Could not establish connection.\r\n");
         return;
     }
-    user->ft_cfd= accept(user->dt_socket, (struct sockaddr *)&addr, &sock_size);
-    if (user->ft_cfd == -1)
+    user->dt_cfd= accept(user->dt_socket, (struct sockaddr *)&addr, &sock_size);
+    if (user->dt_cfd == -1)
+        write_on_fd(user->cfd, "425 Could not establish connection.\r\n");
+    else
+        fct(user, arg);
+}
+
+static void connect_and_launch_fct(
+    user_t *user, const char *arg, void (*fct)(user_t *, const char *))
+{
+    socklen_t size = sizeof(struct sockaddr_in);
+
+    user->dt_cfd = user->dt_socket;
+    if (connect(user->dt_socket, (struct sockaddr *)&user->active_addr, size))
         write_on_fd(user->cfd, "425 Could not establish connection.\r\n");
     else
         fct(user, arg);
@@ -63,6 +75,9 @@ bool user_manage_process(
         user->dt_socket = 0;
         return (true);
     }
-    accept_and_launch_fct(user, arg, fct);
+    if (user->actif)
+        connect_and_launch_fct(user, arg, fct);
+    else
+        accept_and_launch_fct(user, arg, fct);
     exit(0);
 }

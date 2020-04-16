@@ -40,7 +40,7 @@ void user_list_in_child(user_t *user, const char *arg)
     if (cmd) {
         file = popen(cmd, "r");
         if (file) {
-            write_result_on_socket(user->ft_cfd, file);
+            write_result_on_socket(user->dt_cfd, file);
             pclose(file);
         }
         free(cmd);

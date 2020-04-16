@@ -22,7 +22,8 @@
 char *wrap_original_directory(bool change);
 
 int make_socket(void);
-bool prepare_socket(int sock, int ip, short port, struct sockaddr_in *addr);
+bool prepare_socket_listen(int sock, int ip, short port, struct sockaddr_in *);
+bool prepare_socket_connect(int ip, short port, struct sockaddr_in *);
 
 bool contains_cmd(const char *buffer, int end);
 bool extract_cmd(char *buffer, int *end, char **command, char **arg);

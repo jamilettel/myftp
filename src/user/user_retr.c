@@ -30,7 +30,7 @@ void user_retr_in_child(user_t *user, const char *arg)
     if (fd != -1) {
         while ((size = read(fd, buffer, 511)) > 0) {
             buffer[size] = 0;
-            write_on_fd(user->ft_cfd, buffer);
+            write_on_fd(user->dt_cfd, buffer);
         }
         close(fd);
     }

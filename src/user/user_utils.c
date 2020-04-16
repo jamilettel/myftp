@@ -62,8 +62,8 @@ void user_destroy(user_t *user)
     close(user->cfd);
     if (user->dt_socket)
         close(user->dt_socket);
-    if (user->ft_cfd)
-        close(user->ft_cfd);
+    if (user->dt_cfd)
+        close(user->dt_cfd);
     if (user->name)
         free(user->name);
     if (user->passwd)

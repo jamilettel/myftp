@@ -34,7 +34,7 @@ void user_stor_in_child(user_t *user, const char *arg)
 
     write_on_fd(user->cfd, "150 Connection established.\r\n");
     if (fd != -1) {
-        while ((size = read(user->ft_cfd, buffer, 511)) > 0) {
+        while ((size = read(user->dt_cfd, buffer, 511)) > 0) {
             buffer[size] = 0;
             write_on_fd(fd, buffer);
         }
